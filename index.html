@@ -15,8 +15,22 @@ body {
   background-size: 100% 100%;
 }
 </style> 
- <audio controls autoplay>
-  <source src="paranoia 2.wav" type="audio/wav">
-</audio> 
+    <audio id="myAudio">
+    <source src="paranoia 2.wav" type="audio/wav">
+    Your browser does not support audios :c
+</audio>
+<button id="audioButton">click :3</button>
+<script>
+    const audio = document.getElementById("myAudio");
+const audioButton = document.getElementById("audioButton");
+
+audioButton.addEventListener("click", () => {
+    if (audio.paused) {
+        audio.play();
+    } else {
+        audio.pause();
+    }
+});
+</script>
 </body>
 </html>
