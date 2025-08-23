@@ -14,21 +14,18 @@ body {
   background-attachment: fixed;
   background-size: 100% 100%;
 }
-</style> 
-    <audio id="myAudio">
-    <source src="paranoia 2.wav" type="audio/wav">
-    Your browser does not support audios :c
-</audio>
-<button id="audioButton">click :3</button>
-<script>
-    const audio = document.getElementById("myAudio");
-const audioButton = document.getElementById("audioButton");
 
-audioButton.addEventListener("click", () => {
-    if (audio.paused) {
-        audio.play();
-    } else {
-        audio.pause();
+</style> 
+<img src="jaydes-jaydeschrist.gif" id="myImage" alt="Click to play audio" style="cursor: pointer;">
+<audio id="myHiddenAudio" src="paranoia 2.wav"></audio>
+<script>
+const image = document.getElementById("myImage");
+const hiddenAudio = document.getElementById("myHiddenAudio");
+
+image.addEventListener("click", () => {
+    // Check if the audio is paused, then play it.
+    if (hiddenAudio.paused) {
+        hiddenAudio.play();
     }
 });
 </script>
