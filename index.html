@@ -9,53 +9,60 @@
 </head>
 <body>
   <div id="background-button">
-<audio id="background-audio" src="paranoia 2.wav" loop></audio>
- <div id="overlay-text">x0 :3 </div>
+    <audio id="background-audio" src="paranoia 2.mp3" loop></audio>
+
+    <!-- Scrolling text strip -->
+    <div class="scroll-container">
+      <div class="scroll-text">x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3</div>
+      <div class="scroll-text">x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3 x0:3</div>
+   </div>
   </div>
 <style>
-/* Make the body and html fill the entire viewport */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
 
-/* Background image container */
-/* Background image container */
-#background-button {
-  height: 100%;
-  width: 100%;
-  background-image: url('jaydes-jaydeschrist.gif');
-  background-size: cover;
-  background-position: center;
-  cursor: pointer;
-  position: relative; /* needed for positioning text */
-  overflow: hidden;   /* hides text when it moves out of view */
-}
+    /* Background container */
+    #background-button {
+      height: 100%;
+      width: 100%;
+      background-image: url('jaydes-jaydeschrist.gif');
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden; /* hides text outside view */
+    }
 
-/* Moving text */
-#overlay-text {
-  position: absolute;
-  bottom: 20px;        /* keep it near the bottom, can change to top if you want */
-  white-space: nowrap; /* prevents wrapping */
-  font-size: 3em;
-  font-weight: bold;
-  color: white;
-  text-shadow: 2px 2px 5px black;
+    /* The scrolling container */
+    .scroll-container {
+      position: absolute;
+      bottom: 20px;
+      width: 200%;   /* double width for seamless looping */
+      display: flex;
+      animation: scrollText 15s linear infinite;
+    }
 
-  /* Animation */
-  animation: scrollText 10s linear infinite;
-}
+    /* Repeated text */
+    .scroll-text {
+      white-space: nowrap;
+      font-size: 3em;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 5px black;
+      padding-right: 100px; /* spacing between repeats */
+    }
 
-/* Keyframes for animation */
-@keyframes scrollText {
-  0% {
-    left: -100%; /* start completely off screen left */
-  }
-  100% {
-    left: 100%;  /* move completely off screen right */
-  }
-}
+    @keyframes scrollText {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%); /* move left by half */
+      }
+    }
 </style>
 <script>
 const bgButton = document.getElementById('background-button');
