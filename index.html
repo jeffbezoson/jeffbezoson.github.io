@@ -21,6 +21,7 @@ html, body {
 }
 
 /* Background image container */
+/* Background image container */
 #background-button {
   height: 100%;
   width: 100%;
@@ -28,22 +29,33 @@ html, body {
   background-size: cover;
   background-position: center;
   cursor: pointer;
-  position: relative; /* important so text positions relative to this */
+  position: relative; /* needed for positioning text */
+  overflow: hidden;   /* hides text when it moves out of view */
 }
 
-/* Overlay text styling */
+/* Moving text */
 #overlay-text {
   position: absolute;
-  top: 50%;           /* move to vertical center */
-  left: 50%;          /* move to horizontal center */
-  transform: translate(-50%, -50%); /* perfect centering */
-  color: white;       /* text color */
-  font-size: 3em;     /* bigger text */
+  bottom: 20px;        /* keep it near the bottom, can change to top if you want */
+  white-space: nowrap; /* prevents wrapping */
+  font-size: 3em;
   font-weight: bold;
-  text-shadow: 2px 2px 5px black; /* glow for readability */
+  color: white;
+  text-shadow: 2px 2px 5px black;
+
+  /* Animation */
+  animation: scrollText 10s linear infinite;
 }
 
-
+/* Keyframes for animation */
+@keyframes scrollText {
+  0% {
+    left: -100%; /* start completely off screen left */
+  }
+  100% {
+    left: 100%;  /* move completely off screen right */
+  }
+}
 </style>
 <script>
 const bgButton = document.getElementById('background-button');
