@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artists</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 40px;
+    }
+    h1 {
+      margin-bottom: 40px;
+    }
+    .artist-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .artist-card {
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 20px;
+      width: 280px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+    }
+    .artist-card:hover {
+      transform: scale(1.05);
+    }
+    .artist-card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .artist-card h2 {
+      margin: 15px 0 10px;
+    }
+    .artist-links a {
+      display: block;
+      margin: 8px 0;
+      text-decoration: none;
+      color: #1DB954; /* Spotify green */
+      font-weight: bold;
+    }
+    .artist-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Featured Artists</h1>
+  <div class="artist-container">
+
+    <!-- Artist 1 -->
+    <div class="artist-card">
+      <a href="https://open.spotify.com/artist/3UPKMj9pFKMPgXRsRnjl80" target="_blank">
+        <img src = "https://cdn.discordapp.com/attachments/1312139916066689115/1415876565266595932/IMG_9208.png?ex=68c4cd4e&is=68c37bce&hm=f991a1d484a6f3b86285e2a67bc3b9fff16fce7ba5827700c24c8c9e9b269b3b" alt="Artist 1">
+      </a>
+      <h2> ohx0 </h2>
+      <div class="artist-links">
+        <a href="mailto:x0@extinguished.net">Email(x0@extinguished.net)</a>
+      </div>
+    </div>
+
+    <!-- Artist 2 -->
+    <div class="artist-card">
+      <a href="https://open.spotify.com/artist/1lOc2Xcw2J3HTymczWZe60" target="_blank">
+        <img src="https://cdn.discordapp.com/attachments/1312139916066689115/1415875930425135164/IMG_9217.png?ex=68c4ccb7&is=68c37b37&hm=ab00c08133160c4124cda4388776b2118807c35aa6ad67d880f7fc1c311cd7ed" alt="bother">
+      </a>
+      <h2> bother </h2>
+      <div class="artist-links">
+        <a href="mailto:youareacreepgetawayfromme@gmail.com">Email(youareacreepgetawayfromme@gmail.com)</a>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
