@@ -1,4 +1,21 @@
 
+header {
+  background-color: #1DB954; 
+  color: #111; 
+  padding: 20px 0;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+header p {
+  font-size: 1rem;
+  color: #222; 
+}
+
 body, h1, h2, p, ul, li, nav, footer {
   margin: 0;
   padding: 0;
@@ -11,20 +28,6 @@ body {
   text-align: center;
   min-height: 100vh;
 }
-
-header {
-  margin-top: 20px;
-}
-
-header h1 {
-  font-size: 2rem;
-}
-
-header p {
-  font-size: 1rem;
-  color: #aaa;
-}
-
 
 nav {
   margin: 20px 0;
