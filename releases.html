@@ -5,67 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Releases - Extinguished Records</title>
   <style>
+    /* General Layout */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       text-align: center;
       background: #f5f5f5;
+      color: #222;
     }
+
+    /* Header */
     header {
-      background: green;
+      background: #2e7d32; /* Dark green */
       color: white;
-      padding: 1rem;
+      padding: 1.5rem 1rem;
     }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    header p {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* Navigation */
     nav {
-      margin: 1rem 0;
+      background: #e8f5e9; /* Light green background */
+      padding: 0.8rem;
     }
     nav a {
       margin: 0 1rem;
       text-decoration: none;
-      color: black;
+      color: #2e7d32;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #1b5e20; /* Darker hover */
     }
     nav a.active {
-      font-weight: bold;
+      border-bottom: 2px solid #2e7d32;
+      padding-bottom: 0.2rem;
     }
+
+    /* Carousel Container */
     .carousel-container {
       position: relative;
       overflow: hidden;
       width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
+      max-width: 1000px;
+      margin: 2rem auto;
       border-radius: 12px;
       background: white;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
+
     .carousel {
       display: flex;
       transition: transform 0.8s ease-in-out;
       width: 100%;
     }
+
+    /* Artist Sections */
     .artist-section {
       min-width: 100%;
       padding: 2rem;
       box-sizing: border-box;
     }
     .artist-section h2 {
-      margin-bottom: 1rem;
-    }
-    .track {
       margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      color: #2e7d32;
+    }
+
+    /* Track Cards */
+    .track {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    .track strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #1b5e20;
     }
     iframe {
       border-radius: 12px;
-      margin-top: 0.5rem;
+      width: 100%;
+      height: 152px;
     }
+
+    /* Footer */
     footer {
-      background: #222;
+      background: #2e7d32;
       color: white;
       padding: 1rem;
       margin-top: 2rem;
       position: fixed;
       bottom: 0;
       width: 100%;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -88,55 +133,20 @@
         <!-- ohx0 Section -->
         <div class="artist-section">
           <h2>ohx0</h2>
-
-          <div class="track">
-            <strong>I Hate Summer Nights in July (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/1poMrfqwEdSPdQVeRkYOGr" width="100%" height="152" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-          </div>
-
-          <div class="track">
-            <strong>Pain (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/3W25ixru6I4VlEc4djNUu2" width="100%" height="152" frameborder="0"></iframe>
-          </div>
-
-          <div class="track">
-            <strong>emily looked so hot in her room (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/4V3Vf04d7vbnoDEuVkoRvD" width="100%" height="152" frameborder="0"></iframe>
-          </div>
-
-          <div class="track">
-            <strong>i wish u cud hear my thoughts cuz theyre mainly about u but wutever (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/4D1ph75K3vdmK8hC7B3Rkq" width="100%" height="152" frameborder="0"></iframe>
-          </div>
-
-          <div class="track">
-            <strong>not22 (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/2QTti5x7UbBPARBaICXELJ" width="100%" height="152" frameborder="0"></iframe>
-          </div>
-
-          <div class="track">
-            <strong>birthday (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/6TkTFKPMm81JXVM4iqnjv6" width="100%" height="152" frameborder="0"></iframe>
-          </div>
-
-          <div class="track">
-            <strong>killer (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/5OrU1kXCmetQHZlx87207z" width="100%" height="152" frameborder="0"></iframe>
-          </div>
-
-          <div class="track">
-            <strong>Fdb_rsdfb (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/4s8fNI4dqZjcT9m0R5pO3R" width="100%" height="152" frameborder="0"></iframe>
-          </div>
+          <div class="track"><strong>I Hate Summer Nights in July (2025)</strong><iframe src="https://open.spotify.com/embed/album/1poMrfqwEdSPdQVeRkYOGr"></iframe></div>
+          <div class="track"><strong>Pain (2025)</strong><iframe src="https://open.spotify.com/embed/album/3W25ixru6I4VlEc4djNUu2"></iframe></div>
+          <div class="track"><strong>emily looked so hot in her room (2025)</strong><iframe src="https://open.spotify.com/embed/album/4V3Vf04d7vbnoDEuVkoRvD"></iframe></div>
+          <div class="track"><strong>i wish u cud hear my thoughts cuz theyre mainly about u but wutever (2025)</strong><iframe src="https://open.spotify.com/embed/album/4D1ph75K3vdmK8hC7B3Rkq"></iframe></div>
+          <div class="track"><strong>not22 (2025)</strong><iframe src="https://open.spotify.com/embed/album/2QTti5x7UbBPARBaICXELJ"></iframe></div>
+          <div class="track"><strong>birthday (2025)</strong><iframe src="https://open.spotify.com/embed/album/6TkTFKPMm81JXVM4iqnjv6"></iframe></div>
+          <div class="track"><strong>killer (2025)</strong><iframe src="https://open.spotify.com/embed/album/5OrU1kXCmetQHZlx87207z"></iframe></div>
+          <div class="track"><strong>Fdb_rsdfb (2025)</strong><iframe src="https://open.spotify.com/embed/album/4s8fNI4dqZjcT9m0R5pO3R"></iframe></div>
         </div>
 
         <!-- bother Section -->
         <div class="artist-section">
           <h2>bother</h2>
-          <div class="track">
-            <strong>idc what she doin (2025)</strong>
-            <iframe src="https://open.spotify.com/embed/album/632N4E6v7XvjOLB1s0PV6D" width="100%" height="152" frameborder="0"></iframe>
-          </div>
+          <div class="track"><strong>idc what she doin (2025)</strong><iframe src="https://open.spotify.com/embed/album/632N4E6v7XvjOLB1s0PV6D"></iframe></div>
         </div>
 
       </div>
@@ -157,7 +167,6 @@
       carousel.style.transform = `translateX(-${index * 100}%)`;
     }
 
-    // auto scroll every 6 seconds
     setInterval(showNextSection, 6000);
   </script>
 </body>
