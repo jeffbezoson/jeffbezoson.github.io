@@ -4,112 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Releases - Extinguished Records</title>
-  <style>
-    /* General Layout */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #121212; /* dark background */
-      color: #fff;
-      text-align: center;
-    }
-
-    /* Header */
-    header {
-      background: #1DB954; /* bright green */
-      color: #121212;
-      padding: 1.5rem 1rem;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-    header p {
-      margin: 0;
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    /* Navigation */
-    nav {
-      background: #181818; /* dark nav */
-      padding: 0.8rem;
-    }
-    nav a {
-      margin: 0 1rem;
-      text-decoration: none;
-      color: #1DB954; /* green accent */
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-    nav a:hover {
-      color: #17a34a; /* darker green hover */
-    }
-    nav a.active {
-      border-bottom: 2px solid #1DB954;
-      padding-bottom: 0.2rem;
-    }
-
-    /* Carousel Container */
-    .carousel-container {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      max-width: 1000px;
-      margin: 2rem auto;
-    }
-
-    .carousel {
-      display: flex;
-      transition: transform 0.8s ease-in-out;
-      width: 100%;
-    }
-
-    /* Artist Sections */
-    .artist-section {
-      min-width: 100%;
-      padding: 2rem;
-      box-sizing: border-box;
-    }
-    .artist-section h2 {
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-      color: #1DB954;
-    }
-
-    /* Track Cards */
-    .track {
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background: #1e1e1e; /* dark card */
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-    }
-    .track strong {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-      color: #1DB954;
-    }
-    iframe {
-      border-radius: 12px;
-      width: 100%;
-      height: 152px;
-    }
-
-    /* Footer */
-    footer {
-      background: #121212;
-      color: #fff;
-      padding: 1rem;
-      margin-top: 2rem;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      font-size: 0.9rem;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -125,6 +20,7 @@
 
   <main>
     <div class="carousel-container">
+      <button class="arrow left" id="prev">&#10094;</button>
       <div class="carousel" id="carousel">
 
         <!-- ohx0 Section -->
@@ -147,6 +43,7 @@
         </div>
 
       </div>
+      <button class="arrow right" id="next">&#10095;</button>
     </div>
   </main>
 
@@ -159,12 +56,16 @@
     const sections = document.querySelectorAll('.artist-section');
     let index = 0;
 
-    function showNextSection() {
-      index = (index + 1) % sections.length;
+    function showSection(i) {
+      index = (i + sections.length) % sections.length;
       carousel.style.transform = `translateX(-${index * 100}%)`;
     }
 
-    setInterval(showNextSection, 6000);
+    document.getElementById('prev').addEventListener('click', () => showSection(index - 1));
+    document.getElementById('next').addEventListener('click', () => showSection(index + 1));
+
+    // Auto-scroll
+    setInterval(() => showSection(index + 1), 6000);
   </script>
 </body>
 </html>
