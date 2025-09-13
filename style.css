@@ -134,13 +134,12 @@ footer {
   background-color: #17a74a;
   transform: scale(1.05);
 }
-
 .carousel {
   display: flex;
   gap: 30px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 20px;
+  padding: 20px 0;
 }
 
 .carousel::-webkit-scrollbar {
@@ -158,11 +157,10 @@ footer {
   flex-direction: column;
   align-items: center;
   scroll-snap-align: start;
+  text-align: center;
 }
 
 .release strong {
   margin-bottom: 10px;
   font-size: 1rem;
-  text-align: center;
 }
-
