@@ -1,1 +1,0 @@
-const carousel=document.getElementById("carousel"),sections=document.querySelectorAll(".artist-section");let index=0;function showNextSection(){index=(index+1)%sections.length,carousel.style.transform=`translateX(-${100*index}%)`}setInterval(showNextSection,6e3);
