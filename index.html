@@ -252,8 +252,7 @@
         a.innerHTML = `${getIcon(link.url)}<span class="link-label">${link.label || link.url}</span>`;
         container.appendChild(a);
       });
-      document.getElementById('links-count').textContent = links.length;
-
+      
       const newViews = (data.views || 0) + 1;
       document.getElementById('views-count').textContent = newViews;
       await sb.from('profile').update({ views: newViews }).eq('id', 'main');
