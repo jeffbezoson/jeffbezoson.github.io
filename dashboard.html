@@ -111,9 +111,6 @@
       </div>
       <div class="error-msg" id="error-msg">incorrect password</div>
       <button class="btn btn-primary" onclick="tryLogin()">sign in</button>
-      <p style="font-family:'DM Mono',monospace;font-size:10px;color:#333;margin-top:14px;line-height:1.6;">
-        default password: <span style="color:#555">admin</span><br>change it after signing in.
-      </p>
     </div>
   </div>
 
@@ -219,7 +216,7 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrdWh0cWdwaWZ3eGZpZ3Bmb2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3Njg3NjMsImV4cCI6MjA5MzM0NDc2M30.3A6ed9unJFuffExaOeXMJ75dcUj9SH7gQ5A_fXKQp_U';
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const DEFAULT_PW = 'admin';
+    const DEFAULT_PW = 'hi';
     function getPassword() { return localStorage.getItem('dash_password') || DEFAULT_PW; }
 
     function tryLogin() {
