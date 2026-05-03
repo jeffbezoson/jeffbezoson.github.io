@@ -322,12 +322,20 @@
   <div id="login-screen">
     <div class="login-box">
       <div class="login-title">dashboard — sign in</div>
-      <div class="field">
-        <div class="field-label">password</div>
-        <input type="password" id="pw-input" placeholder="enter password" autocomplete="current-password" />
-      </div>
-      <div class="error-msg" id="error-msg">incorrect password</div>
-      <button class="btn btn-primary" onclick="tryLogin()">sign in</button>
+<div class="field">
+  <div class="field-label">email</div>
+  <input type="text" id="email-input" placeholder="you@email.com" />
+</div>
+
+<div class="field">
+  <div class="field-label">password</div>
+  <input type="password" id="pw-input" placeholder="enter password" />
+</div>
+
+<div class="error-msg" id="error-msg">invalid login</div>
+
+<button class="btn btn-primary" onclick="signIn()">sign in</button>
+<button class="btn" onclick="signUp()">create account</button>
     </div>
   </div>
 
