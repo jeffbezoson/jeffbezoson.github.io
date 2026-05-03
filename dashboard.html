@@ -216,12 +216,12 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrdWh0cWdwaWZ3eGZpZ3Bmb2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3Njg3NjMsImV4cCI6MjA5MzM0NDc2M30.3A6ed9unJFuffExaOeXMJ75dcUj9SH7gQ5A_fXKQp_U';
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const DEFAULT_PW = 'hi';
-    function getPassword() { return localStorage.getItem('dash_password') || DEFAULT_PW; }
-
-    function tryLogin() {
+    async function tryLogin() {
       const val = document.getElementById('pw-input').value;
-      if (val === getPassword()) {
+      if (!val) return;
+      const { data, error } = await sb.from('profile').select('password').eq('id', 'main').single();
+      const correct = (data && data.password) ? data.password : 'admin';
+      if (!error && val === correct) {
         sessionStorage.setItem('dash_auth', '1');
         showDashboard();
       } else {
@@ -351,15 +351,22 @@
       el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 
-    function changePassword() {
+    async function changePassword() {
       const current = document.getElementById('pw-current').value;
       const next = document.getElementById('pw-new').value;
       const confirm = document.getElementById('pw-confirm').value;
       const msg = document.getElementById('pw-msg');
-      if (current !== getPassword()) { msg.style.color='#7a3a3a'; msg.textContent='incorrect current password'; return; }
+
+      const { data } = await sb.from('profile').select('password').eq('id', 'main').single();
+      const correct = (data && data.password) ? data.password : 'admin';
+
+      if (current !== correct) { msg.style.color='#7a3a3a'; msg.textContent='incorrect current password'; return; }
       if (!next) { msg.style.color='#7a3a3a'; msg.textContent='new password cannot be empty'; return; }
       if (next !== confirm) { msg.style.color='#7a3a3a'; msg.textContent='passwords do not match'; return; }
-      localStorage.setItem('dash_password', next);
+
+      const { error } = await sb.from('profile').update({ password: next }).eq('id', 'main');
+      if (error) { msg.style.color='#7a3a3a'; msg.textContent='failed to update: ' + error.message; return; }
+
       msg.style.color='#3a5a3a'; msg.textContent='password updated';
       document.getElementById('pw-current').value = '';
       document.getElementById('pw-new').value = '';
