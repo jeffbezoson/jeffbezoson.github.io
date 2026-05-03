@@ -439,188 +439,129 @@
   </div>
 
   <script>
-    const DEFAULT_PW = 'admin';
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    function getPassword() {
-      return localStorage.getItem('dash_password') || DEFAULT_PW;
-    }
+<script>
+const supabase = window.supabase.createClient(
+  "https://hkuhtqgpifwxfigpfofk.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+);
 
-    function tryLogin() {
-      const val = document.getElementById('pw-input').value;
-      if (val === getPassword()) {
-        sessionStorage.setItem('dash_auth', '1');
-        showDashboard();
-      } else {
-        document.getElementById('error-msg').style.display = 'block';
-        document.getElementById('pw-input').style.borderColor = '#5a2a2a';
-      }
-    }
+let user = null;
 
-    document.getElementById('pw-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') tryLogin();
-    });
+// ── AUTH ──
+async function signIn() {
+  const email = prompt("email:");
+  const password = prompt("password:");
 
-    function logout() {
-      sessionStorage.removeItem('dash_auth');
-      location.reload();
-    }
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email, password
+  });
 
-    function showDashboard() {
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('dashboard-screen').style.display = 'block';
-      loadDashboard();
-    }
+  if (error) return alert(error.message);
 
-    // Check session on load
-    if (sessionStorage.getItem('dash_auth') === '1') {
-      showDashboard();
-    }
+  user = data.user;
+  showDashboard();
+}
 
-    // ── Data ──
-    const defaultProfile = {
-      name: '',
-      handle: '',
-      bio: '',
-      avatar: '',
-      banner: '',
-      links: [
-        { label: 'Instagram', url: 'instagram.com/you' },
-        { label: 'TikTok', url: 'tiktok.com/@you' },
-        { label: 'Roblox', url: 'roblox.com/users/you' },
-      ]
-    };
+async function signUp() {
+  const email = prompt("email:");
+  const password = prompt("password:");
 
-    function getProfile() {
-      return { ...defaultProfile, ...JSON.parse(localStorage.getItem('profile') || '{}') };
-    }
+  const { error } = await supabase.auth.signUp({ email, password });
+  if (error) alert(error.message);
+  else alert("account created, now sign in");
+}
 
-    function loadDashboard() {
-      const p = getProfile();
-      document.getElementById('d-name').value = p.name;
-      document.getElementById('d-handle').value = p.handle;
-      document.getElementById('d-bio').value = p.bio;
+async function logout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
 
-      if (p.avatar) {
-        document.getElementById('dash-avatar-img').src = p.avatar;
-        document.getElementById('dash-avatar-img').style.display = 'block';
-        document.getElementById('dash-avatar-initials').style.display = 'none';
-      } else {
-        updateAvatarInitials(p.name);
-      }
+// ── LOAD USER ──
+async function init() {
+  const { data } = await supabase.auth.getUser();
+  if (data.user) {
+    user = data.user;
+    showDashboard();
+  }
+}
+init();
 
-      if (p.banner) {
-        document.getElementById('banner-thumb-img').src = p.banner;
-        document.getElementById('banner-thumb-img').style.display = 'block';
-        document.getElementById('banner-thumb-pattern').style.display = 'none';
-      }
+// ── LOAD PROFILE ──
+async function loadProfile() {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
 
-      const list = document.getElementById('dash-links');
-      list.innerHTML = '';
-      (p.links || []).forEach(l => addLinkRow(l.label, l.url));
-    }
+  if (!data) return;
 
-    document.getElementById('d-name').addEventListener('input', function() {
-      updateAvatarInitials(this.value);
-    });
+  document.getElementById("d-name").value = data.name || "";
+  document.getElementById("d-handle").value = data.handle || "";
+  document.getElementById("d-bio").value = data.bio || "";
 
-    function updateAvatarInitials(name) {
-      const initials = (name || '').trim().split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-      document.getElementById('dash-avatar-initials').textContent = initials || '?';
-    }
+  window._links = data.links || [];
+  renderLinks();
+}
 
-    // Avatar upload
-    document.getElementById('dash-avatar-upload').addEventListener('change', function() {
-      const file = this.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        document.getElementById('dash-avatar-img').src = e.target.result;
-        document.getElementById('dash-avatar-img').style.display = 'block';
-        document.getElementById('dash-avatar-initials').style.display = 'none';
-        window._pendingAvatar = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
+// ── SAVE ──
+async function saveAll() {
+  const profile = {
+    id: user.id,
+    name: document.getElementById("d-name").value,
+    handle: document.getElementById("d-handle").value,
+    bio: document.getElementById("d-bio").value,
+    links: window._links || []
+  };
 
-    // Banner upload
-    document.getElementById('dash-banner-upload').addEventListener('change', function() {
-      const file = this.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        document.getElementById('banner-thumb-img').src = e.target.result;
-        document.getElementById('banner-thumb-img').style.display = 'block';
-        document.getElementById('banner-thumb-pattern').style.display = 'none';
-        window._pendingBanner = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
+  const { error } = await supabase
+    .from("profiles")
+    .upsert(profile);
 
-    function addLinkRow(label = '', url = '') {
-      const list = document.getElementById('dash-links');
-      const row = document.createElement('div');
-      row.className = 'link-row';
-      row.innerHTML = `
-        <span class="link-drag" title="drag to reorder">⠿</span>
-        <input class="inp-label" type="text" placeholder="Label" value="${escHtml(label)}" />
-        <input class="inp-url" type="text" placeholder="URL (e.g. instagram.com/you)" value="${escHtml(url)}" />
-        <button class="link-del" onclick="this.closest('.link-row').remove()">×</button>
-      `;
-      list.appendChild(row);
-    }
+  if (error) return alert(error.message);
 
-    function escHtml(s) {
-      return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
+  alert("saved across all devices ✅");
+}
 
-    function saveAll() {
-      const p = getProfile();
-      p.name = document.getElementById('d-name').value.trim();
-      p.handle = document.getElementById('d-handle').value.trim();
-      p.bio = document.getElementById('d-bio').value.trim();
-      if (window._pendingAvatar) p.avatar = window._pendingAvatar;
-      if (window._pendingBanner) p.banner = window._pendingBanner;
+// ── LINKS ──
+function renderLinks() {
+  const list = document.getElementById("dash-links");
+  list.innerHTML = "";
 
-      const rows = document.querySelectorAll('#dash-links .link-row');
-      p.links = Array.from(rows).map(row => ({
-        label: row.querySelector('.inp-label').value.trim(),
-        url: row.querySelector('.inp-url').value.trim(),
-      })).filter(l => l.url);
+  (window._links || []).forEach((l, i) => {
+    const row = document.createElement("div");
+    row.innerHTML = `
+      <input value="${l.label}" onchange="updateLink(${i}, 'label', this.value)">
+      <input value="${l.url}" onchange="updateLink(${i}, 'url', this.value)">
+      <button onclick="removeLink(${i})">x</button>
+    `;
+    list.appendChild(row);
+  });
+}
 
-      localStorage.setItem('profile', JSON.stringify(p));
+function addLink() {
+  window._links.push({ label: "", url: "" });
+  renderLinks();
+}
 
-      const flash = document.getElementById('save-flash');
-      flash.classList.add('show');
-      setTimeout(() => flash.classList.remove('show'), 2000);
-    }
+function updateLink(i, key, value) {
+  window._links[i][key] = value;
+}
 
-    function togglePwChange() {
-      const el = document.getElementById('pw-change-fields');
-      el.style.display = el.style.display === 'none' ? 'block' : 'none';
-    }
+function removeLink(i) {
+  window._links.splice(i, 1);
+  renderLinks();
+}
 
-    function changePassword() {
-      const current = document.getElementById('pw-current').value;
-      const next = document.getElementById('pw-new').value;
-      const confirm = document.getElementById('pw-confirm').value;
-      const msg = document.getElementById('pw-msg');
-
-      if (current !== getPassword()) {
-        msg.style.color = '#7a3a3a'; msg.textContent = 'incorrect current password'; return;
-      }
-      if (!next) {
-        msg.style.color = '#7a3a3a'; msg.textContent = 'new password cannot be empty'; return;
-      }
-      if (next !== confirm) {
-        msg.style.color = '#7a3a3a'; msg.textContent = 'passwords do not match'; return;
-      }
-      localStorage.setItem('dash_password', next);
-      msg.style.color = '#3a5a3a';
-      msg.textContent = 'password updated';
-      document.getElementById('pw-current').value = '';
-      document.getElementById('pw-new').value = '';
-      document.getElementById('pw-confirm').value = '';
-    }
+// ── UI ──
+function showDashboard() {
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("dashboard-screen").style.display = "block";
+  loadProfile();
+}
+</script>
   </script>
 </body>
 </html>
