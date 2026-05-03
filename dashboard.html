@@ -5,75 +5,106 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Dashboard</title>
 
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+* { box-sizing:border-box; margin:0; padding:0; }
+
 body {
   background:#0a0a0a;
   color:#e8e4de;
-  font-family:sans-serif;
+  font-family:'DM Sans',sans-serif;
+}
+
+/* LOGIN */
+#login-screen {
+  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  height:100vh;
 }
 
-.box {
+.login-box {
+  width:100%;
+  max-width:340px;
   background:#111;
-  padding:30px;
-  border-radius:12px;
-  width:320px;
+  border:1px solid #222;
+  border-radius:16px;
+  padding:32px;
 }
 
 input {
   width:100%;
-  margin:6px 0;
+  margin-bottom:10px;
   padding:10px;
   background:#161616;
-  border:none;
+  border:1px solid #222;
   color:#ccc;
 }
 
 button {
   width:100%;
-  margin-top:10px;
   padding:10px;
+  margin-top:10px;
   background:#e8e4de;
   border:none;
   cursor:pointer;
 }
 
-#dashboard { display:none; }
-.link { display:flex; gap:6px; margin:6px 0; }
+/* DASHBOARD */
+#dashboard-screen { display:none; padding:30px; }
+
+.section { margin-bottom:20px; }
+
+.link-row {
+  display:flex;
+  gap:6px;
+  margin-bottom:6px;
+}
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div class="box" id="login">
-  <h3>Login</h3>
-  <input id="email" placeholder="email">
-  <input id="password" type="password" placeholder="password">
-  <button onclick="signIn()">Sign In</button>
-  <button onclick="signUp()">Create Account</button>
-  <p id="error" style="color:red;"></p>
+<div id="login-screen">
+  <div class="login-box">
+    <h3 style="margin-bottom:15px;">Sign In</h3>
+
+    <input id="email" placeholder="email">
+    <input id="password" type="password" placeholder="password">
+
+    <button onclick="signIn()">Sign In</button>
+    <button onclick="signUp()">Create Account</button>
+
+    <p id="error" style="color:#ff6b6b;margin-top:10px;"></p>
+  </div>
 </div>
 
 <!-- DASHBOARD -->
-<div class="box" id="dashboard">
-  <h3 id="user-email"></h3>
+<div id="dashboard-screen">
 
-  <input id="name" placeholder="name">
-  <input id="handle" placeholder="@handle">
-  <input id="bio" placeholder="bio">
+  <h3 id="user-email" style="margin-bottom:20px;"></h3>
 
-  <h4>Links</h4>
-  <div id="links"></div>
-  <button onclick="addLink()">+ Add Link</button>
+  <div class="section">
+    <input id="name" placeholder="name">
+    <input id="handle" placeholder="@handle">
+    <input id="bio" placeholder="bio">
+  </div>
 
-  <button onclick="save()">Save</button>
-  <button onclick="logout()">Logout</button>
+  <div class="section">
+    <h4>Links</h4>
+    <div id="links"></div>
+    <button onclick="addLink()">+ Add Link</button>
+  </div>
+
+  <div class="section">
+    <button onclick="save()">Save</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+
 </div>
 
 <script>
@@ -85,17 +116,20 @@ const supabase = window.supabase.createClient(
 let user = null;
 let links = [];
 
-// INIT
+/* INIT */
 init();
 async function init() {
+  document.getElementById("dashboard-screen").style.display = "none";
+
   const { data } = await supabase.auth.getUser();
+
   if (data.user) {
     user = data.user;
     showDashboard();
   }
 }
 
-// AUTH
+/* AUTH */
 async function signIn() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
@@ -116,7 +150,7 @@ async function signUp() {
 
   if (error) return showError(error.message);
 
-  alert("Account created. Confirm email if required.");
+  alert("Account created. Check email if confirmation is on.");
 }
 
 async function logout() {
@@ -124,19 +158,19 @@ async function logout() {
   location.reload();
 }
 
-// UI
+/* UI */
 function showError(msg) {
   document.getElementById("error").textContent = msg;
 }
 
 function showDashboard() {
-  document.getElementById("login").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("dashboard-screen").style.display = "block";
   document.getElementById("user-email").textContent = user.email;
   loadProfile();
 }
 
-// PROFILE
+/* PROFILE */
 async function loadProfile() {
   const { data } = await supabase
     .from("profiles")
@@ -167,17 +201,17 @@ async function save() {
 
   if (error) return alert(error.message);
 
-  alert("Saved ✅ (syncs across devices)");
+  alert("Saved ✅");
 }
 
-// LINKS
+/* LINKS */
 function renderLinks() {
   const container = document.getElementById("links");
   container.innerHTML = "";
 
   links.forEach((l, i) => {
     const div = document.createElement("div");
-    div.className = "link";
+    div.className = "link-row";
 
     div.innerHTML = `
       <input value="${l.label}" onchange="links[${i}].label=this.value">
@@ -200,574 +234,5 @@ function removeLink(i) {
 }
 </script>
 
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      min-height: 100vh;
-      background: #0a0a0a;
-      font-family: 'DM Sans', sans-serif;
-      color: #e8e4de;
-    }
-
-    /* ── Login screen ── */
-    #login-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    .login-box {
-      width: 100%;
-      max-width: 340px;
-      background: #111;
-      border: 0.5px solid #222;
-      border-radius: 16px;
-      padding: 32px 28px;
-    }
-
-    .login-title {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: #444;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-
-    .field-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: #444;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    input[type="password"], input[type="text"], input[type="url"], textarea {
-      width: 100%;
-      background: #161616;
-      border: 0.5px solid #222;
-      border-radius: 8px;
-      color: #ccc;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 300;
-      padding: 10px 12px;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    input:focus, textarea:focus { border-color: #444; }
-
-    textarea { resize: vertical; min-height: 70px; line-height: 1.6; }
-
-    .btn {
-      width: 100%;
-      padding: 10px 14px;
-      background: #1a1a1a;
-      border: 0.5px solid #2a2a2a;
-      border-radius: 8px;
-      color: #999;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 400;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-      margin-top: 16px;
-    }
-
-    .btn:hover { background: #222; color: #ccc; border-color: #333; }
-
-    .btn-primary {
-      background: #e8e4de;
-      border-color: #e8e4de;
-      color: #111;
-    }
-
-    .btn-primary:hover { background: #fff; border-color: #fff; color: #111; }
-
-    .error-msg {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: #7a3a3a;
-      margin-top: 10px;
-      display: none;
-    }
-
-    /* ── Dashboard ── */
-    #dashboard-screen { display: none; }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 28px;
-      border-bottom: 0.5px solid #1a1a1a;
-      position: sticky;
-      top: 0;
-      background: #0a0a0a;
-      z-index: 100;
-    }
-
-    .topbar-title {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: #444;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .topbar-actions { display: flex; gap: 8px; align-items: center; }
-
-    .btn-sm {
-      padding: 7px 14px;
-      background: #1a1a1a;
-      border: 0.5px solid #2a2a2a;
-      border-radius: 8px;
-      color: #777;
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      transition: all 0.15s;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-sm:hover { color: #ccc; border-color: #444; background: #222; }
-
-    .btn-save {
-      background: #e8e4de;
-      border-color: #e8e4de;
-      color: #111;
-    }
-
-    .btn-save:hover { background: #fff; border-color: #fff; color: #111; }
-
-    .save-flash {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: #3a5a3a;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .save-flash.show { opacity: 1; }
-
-    .dashboard-body {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 32px 28px 80px;
-    }
-
-    .section {
-      margin-bottom: 36px;
-    }
-
-    .section-title {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: #444;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 0.5px solid #1a1a1a;
-    }
-
-    .field { margin-bottom: 14px; }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .avatar-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .avatar-preview {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: #1e1e1e;
-      border: 0.5px solid #2a2a2a;
-      overflow: hidden;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'DM Mono', monospace;
-      font-size: 18px;
-      color: #555;
-    }
-
-    .avatar-preview img { width: 100%; height: 100%; object-fit: cover; display: none; }
-
-    .upload-btn {
-      padding: 8px 14px;
-      background: #161616;
-      border: 0.5px dashed #2a2a2a;
-      border-radius: 8px;
-      color: #555;
-      font-size: 12px;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .upload-btn:hover { border-color: #444; color: #888; }
-
-    /* Links editor */
-    .links-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-
-    .link-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #161616;
-      border: 0.5px solid #1e1e1e;
-      border-radius: 8px;
-      padding: 8px 10px;
-    }
-
-    .link-row input {
-      background: transparent;
-      border: none;
-      padding: 2px 4px;
-      font-size: 12px;
-      margin: 0;
-    }
-
-    .link-row input:focus { border-color: transparent; }
-
-    .link-row .inp-label { flex: 1; color: #aaa; }
-    .link-row .inp-url { flex: 2; color: #666; }
-
-    .link-drag {
-      color: #333;
-      cursor: grab;
-      font-size: 14px;
-      flex-shrink: 0;
-      padding: 0 2px;
-    }
-
-    .link-del {
-      background: transparent;
-      border: none;
-      color: #333;
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 1;
-      padding: 0 2px;
-      transition: color 0.15s;
-      flex-shrink: 0;
-    }
-
-    .link-del:hover { color: #888; }
-
-    .add-link-btn {
-      width: 100%;
-      padding: 9px 12px;
-      background: transparent;
-      border: 0.5px dashed #222;
-      border-radius: 8px;
-      color: #3a3a3a;
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .add-link-btn:hover { border-color: #333; color: #555; }
-
-    /* Password change */
-    .change-pw-toggle {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: #3a3a3a;
-      cursor: pointer;
-      letter-spacing: 0.05em;
-      background: none;
-      border: none;
-      padding: 0;
-      transition: color 0.15s;
-    }
-
-    .change-pw-toggle:hover { color: #666; }
-
-    #pw-change-fields { display: none; margin-top: 14px; }
-  </style>
-</head>
-<body>
-
-  <!-- Login -->
-  <div id="login-screen">
-    <div class="login-box">
-      <div class="login-title">dashboard — sign in</div>
-<div class="field">
-  <div class="field-label">email</div>
-  <input type="text" id="email-input" placeholder="you@email.com" />
-</div>
-
-<div class="field">
-  <div class="field-label">password</div>
-  <input type="password" id="pw-input" placeholder="enter password" />
-</div>
-
-<div class="error-msg" id="error-msg">invalid login</div>
-
-<button class="btn btn-primary" onclick="signIn()">sign in</button>
-<button class="btn" onclick="signUp()">create account</button>
-    </div>
-  </div>
-
-  <!-- Dashboard -->
-  <div id="dashboard-screen">
-    <div class="topbar">
-      <div class="topbar-title">dashboard</div>
-      <div class="topbar-actions">
-        <span class="save-flash" id="save-flash">saved</span>
-        <a class="btn-sm" href="index.html" target="_blank">view profile ↗</a>
-        <button class="btn-sm btn-save" onclick="saveAll()">save changes</button>
-      </div>
-    </div>
-
-    <div class="dashboard-body">
-
-      <!-- Profile info -->
-      <div class="section">
-        <div class="section-title">profile</div>
-
-        <div class="avatar-row">
-          <div class="avatar-preview" id="dash-avatar-preview">
-            <img id="dash-avatar-img" alt="avatar" />
-            <span id="dash-avatar-initials">?</span>
-          </div>
-          <div>
-            <div class="upload-btn" onclick="document.getElementById('dash-avatar-upload').click()">upload photo</div>
-            <input type="file" id="dash-avatar-upload" accept="image/*" style="display:none" />
-            <div style="font-size:11px;color:#333;margin-top:6px;font-family:'DM Mono',monospace;">recommended: square, min 200×200px</div>
-          </div>
-        </div>
-
-        <div class="two-col">
-          <div class="field">
-            <div class="field-label">name</div>
-            <input type="text" id="d-name" placeholder="your name" />
-          </div>
-          <div class="field">
-            <div class="field-label">handle</div>
-            <input type="text" id="d-handle" placeholder="@handle" />
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="field-label">bio</div>
-          <textarea id="d-bio" placeholder="a short bio..."></textarea>
-        </div>
-      </div>
-
-      <!-- Banner -->
-      <div class="section">
-        <div class="section-title">banner</div>
-        <div class="avatar-row">
-          <div style="width:80px;height:44px;border-radius:6px;background:#161616;border:0.5px solid #222;overflow:hidden;flex-shrink:0;" id="banner-thumb">
-            <div id="banner-thumb-pattern" style="width:100%;height:100%;background-image:radial-gradient(circle at 1px 1px,#2a2a2a 1px,transparent 0);background-size:12px 12px;opacity:0.6;"></div>
-            <img id="banner-thumb-img" style="width:100%;height:100%;object-fit:cover;display:none;" alt="banner" />
-          </div>
-          <div>
-            <div class="upload-btn" onclick="document.getElementById('dash-banner-upload').click()">upload banner image</div>
-            <input type="file" id="dash-banner-upload" accept="image/*" style="display:none" />
-            <div style="font-size:11px;color:#333;margin-top:6px;font-family:'DM Mono',monospace;">recommended: 840×220px or wider</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Links -->
-      <div class="section">
-        <div class="section-title">links</div>
-        <div style="display:grid;grid-template-columns:1fr 2fr 24px;gap:8px;margin-bottom:6px;padding:0 10px;">
-          <span style="font-family:'DM Mono',monospace;font-size:10px;color:#333;letter-spacing:0.05em;">label</span>
-          <span style="font-family:'DM Mono',monospace;font-size:10px;color:#333;letter-spacing:0.05em;">url</span>
-        </div>
-        <div class="links-list" id="dash-links"></div>
-        <button class="add-link-btn" onclick="addLinkRow()">+ add link</button>
-      </div>
-
-      <!-- Security -->
-      <div class="section">
-        <div class="section-title">security</div>
-        <button class="change-pw-toggle" onclick="togglePwChange()">change password</button>
-        <div id="pw-change-fields">
-          <div class="field">
-            <div class="field-label">current password</div>
-            <input type="password" id="pw-current" placeholder="current password" />
-          </div>
-          <div class="field">
-            <div class="field-label">new password</div>
-            <input type="password" id="pw-new" placeholder="new password" />
-          </div>
-          <div class="field">
-            <div class="field-label">confirm new password</div>
-            <input type="password" id="pw-confirm" placeholder="confirm new password" />
-          </div>
-          <button class="btn" onclick="changePassword()" style="margin-top:8px;width:auto;padding:8px 20px;">update password</button>
-          <span id="pw-msg" style="font-family:'DM Mono',monospace;font-size:11px;margin-left:12px;"></span>
-        </div>
-      </div>
-
-      <!-- Danger -->
-      <div class="section">
-        <div class="section-title">session</div>
-        <button class="btn-sm" onclick="logout()">sign out</button>
-      </div>
-
-    </div>
-  </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabase = window.supabase.createClient(
-  "https://hkuhtqgpifwxfigpfofk.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrdWh0cWdwaWZ3eGZpZ3Bmb2ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3Njg3NjMsImV4cCI6MjA5MzM0NDc2M30.3A6ed9unJFuffExaOeXMJ75dcUj9SH7gQ5A_fXKQp_U"
-);
-
-let user = null;
-
-// ── AUTH ──
-async function signIn() {
-  const email = prompt("email:");
-  const password = prompt("password:");
-
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email, password
-  });
-
-  if (error) return alert(error.message);
-
-  user = data.user;
-  showDashboard();
-}
-
-async function signUp() {
-  const email = prompt("email:");
-  const password = prompt("password:");
-
-  const { error } = await supabase.auth.signUp({ email, password });
-  if (error) alert(error.message);
-  else alert("account created, now sign in");
-}
-
-async function logout() {
-  await supabase.auth.signOut();
-  location.reload();
-}
-
-// ── LOAD USER ──
-async function init() {
-  const { data } = await supabase.auth.getUser();
-  if (data.user) {
-    user = data.user;
-    showDashboard();
-  }
-}
-init();
-
-// ── LOAD PROFILE ──
-async function loadProfile() {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
-
-  if (!data) return;
-
-  document.getElementById("d-name").value = data.name || "";
-  document.getElementById("d-handle").value = data.handle || "";
-  document.getElementById("d-bio").value = data.bio || "";
-
-  window._links = data.links || [];
-  renderLinks();
-}
-
-// ── SAVE ──
-async function saveAll() {
-  const profile = {
-    id: user.id,
-    name: document.getElementById("d-name").value,
-    handle: document.getElementById("d-handle").value,
-    bio: document.getElementById("d-bio").value,
-    links: window._links || []
-  };
-
-  const { error } = await supabase
-    .from("profiles")
-    .upsert(profile);
-
-  if (error) return alert(error.message);
-
-  alert("saved across all devices ✅");
-}
-
-// ── LINKS ──
-function renderLinks() {
-  const list = document.getElementById("dash-links");
-  list.innerHTML = "";
-
-  (window._links || []).forEach((l, i) => {
-    const row = document.createElement("div");
-    row.innerHTML = `
-      <input value="${l.label}" onchange="updateLink(${i}, 'label', this.value)">
-      <input value="${l.url}" onchange="updateLink(${i}, 'url', this.value)">
-      <button onclick="removeLink(${i})">x</button>
-    `;
-    list.appendChild(row);
-  });
-}
-
-function addLink() {
-  window._links.push({ label: "", url: "" });
-  renderLinks();
-}
-
-function updateLink(i, key, value) {
-  window._links[i][key] = value;
-}
-
-function removeLink(i) {
-  window._links.splice(i, 1);
-  renderLinks();
-}
-
-// ── UI ──
-function showDashboard() {
-  document.getElementById("login-screen").style.display = "none";
-  document.getElementById("dashboard-screen").style.display = "block";
-  loadProfile();
-}
-</script>
 </body>
 </html>
