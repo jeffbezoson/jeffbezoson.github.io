@@ -1,11 +1,19 @@
 <script>
-const sound = new Audio('siam.mp3');
+const audioCtx = new AudioContext();
+let audioBuffer;
+
+// Load and decode once
+fetch('siam.mp3')
+  .then(res => res.arrayBuffer())
+  .then(data => audioCtx.decodeAudioData(data))
+  .then(buffer => { audioBuffer = buffer; });
 
 function playSound() {
-  sound.currentTime = 0; // rewind to start
-  sound.play();          // cuts off previous & replays
+  const source = audioCtx.createBufferSource();
+  source.buffer = audioBuffer;
+  source.connect(audioCtx.destination);
+  source.start(0); // instant, no delay
 }
 
-// Trigger on click, keypress, etc.
 document.addEventListener('keydown', playSound);
 </script>
